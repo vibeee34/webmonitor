@@ -514,3 +514,7 @@ code {
   background-color: var(--error);
   box-shadow: 0 0 10px var(--error);
 }
+
+.modal-title-error {
+  color: #ef4444;
+}

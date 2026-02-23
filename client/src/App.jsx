@@ -14,6 +14,7 @@ function App() {
   const [loadingId, setLoadingId] = useState(null);
   const [isValidUrl, setIsValidUrl] = useState(false);
   const [deleteModal, setDeleteModal] = useState({ show: false, id: null, label: "" });
+  const [errorModal, setErrorModal] = useState({ show: false, title: "", message: "" });
 
   useEffect(() => { fetchLinks(); }, []);
 
@@ -29,6 +30,10 @@ function App() {
     } catch (err) { console.error("Failed to fetch links"); }
   };
 
+  const showError = (title, message) => {
+    setErrorModal({ show: true, title, message });
+  };
+
   const addLink = async (e) => {
     e.preventDefault();
     if (links.length >= 8 || !isValidUrl) return;
@@ -36,7 +41,13 @@ function App() {
       await axios.post(`${API_URL}/add`, { url, label: label || "New Link" });
       setUrl(""); setLabel("");
       fetchLinks();
-    } catch (err) { alert("Error adding link."); }
+    } catch (err) {
+      if (err.response && err.response.status === 429) {
+        showError("Quota Exceeded", "You've reached your limit. Please try adding more links later.");
+      } else {
+        showError("Action Failed", "We couldn't add this link. Something went wrong.");
+      }
+    }
   };
 
   const confirmDelete = (id, label) => { setDeleteModal({ show: true, id, label }); };
@@ -46,7 +57,9 @@ function App() {
       await axios.delete(`${API_URL}/${deleteModal.id}`);
       setDeleteModal({ show: false, id: null, label: "" });
       fetchLinks();
-    } catch (err) { alert("Delete failed"); }
+    } catch (err) {
+      showError("Delete Failed", "The tracker could not be removed at this time.");
+    }
   };
 
   const handleCheck = async (id) => {
@@ -54,7 +67,9 @@ function App() {
     try {
       await axios.post(`${API_URL}/check/${id}`);
       fetchLinks();
-    } catch (err) { alert("Check failed: " + err.message); }
+    } catch (err) {
+      showError("Quota Exceeded", "AI limit reached. Please wait a few minutes before checking again.");
+    }
     setLoadingId(null);
   };
 
@@ -148,6 +163,23 @@ function App() {
             <div className="modal-actions">
               <button onClick={() => setDeleteModal({ show: false, id: null, label: "" })} className="cancel-btn">Cancel</button>
               <button onClick={handleDelete} className="confirm-delete-btn">Delete Tracker</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {errorModal.show && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3 className="modal-title-error">{errorModal.title}</h3>
+            <p>{errorModal.message}</p>
+            <div className="modal-actions">
+              <button
+                onClick={() => setErrorModal({ show: false, title: "", message: "" })}
+                className="cancel-btn btn-full"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
