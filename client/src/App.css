@@ -87,8 +87,7 @@ nav {
 }
 
 .add-link {
-  width: 100%;
-  max-width: 900px;
+  width: 950px;
   background: var(--card-bg);
   padding: 2.5rem 2rem;
   border-radius: 16px;
@@ -166,6 +165,20 @@ form button {
   gap: 2rem;
 }
 
+.link-grid .empty-state {
+  grid-column: 1 / -1;
+  height: 250px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(30, 41, 59, 0.3);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
 .link-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -173,6 +186,13 @@ form button {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  width: 405px;
+}
+
+.link-card .no-history {
+  display: flex;
+  justify-content: center;
+  margin-top: 40%;
 }
 
 .status-container {
