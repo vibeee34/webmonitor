@@ -167,7 +167,6 @@ form button {
 
 .link-grid .empty-state {
   grid-column: 1 / -1;
-  height: 250px !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -187,6 +186,7 @@ form button {
   display: flex;
   flex-direction: column;
   width: 405px;
+  height: 551px;
 }
 
 .link-card .no-history {
@@ -197,6 +197,7 @@ form button {
 
 .status-container {
   width: 100%;
+  height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
